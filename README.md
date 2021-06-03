@@ -1,2 +1,2 @@
 # netology_devops
-Netology Devops engineer
+Задание №2 - Описание жизненного цикла задачи
