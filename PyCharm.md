@@ -1,4 +1,5 @@
 New file
 PyCharm
 
-Second file
+Second line
+Third line
