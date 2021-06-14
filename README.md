@@ -8,3 +8,5 @@ Hello
 5. Файлы override.tf и override.tf.json
 6. Все файлы, заканчивающиеся на _override.tf и _override.tf.json
 7. Файлы .terraformrc и terraform.rc 
+
+Main branch
