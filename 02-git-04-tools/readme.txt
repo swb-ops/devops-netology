@@ -19,16 +19,16 @@ Date:   Thu Mar 5 20:56:10 2020 +0000
 
     3. Сколько родителей у коммита b8d720? Напишите их хеши.
 
+Ответ два родителя:
+
 #git log | grep "b8d720"
 commit b8d720f8340221f2146e4e4870bf2ee0bc48f2d5
 
 #git log --pretty=raw --parents -1 b8d720f8340221f2146e4e4870bf2ee0bc48f2d5
 commit b8d720f8340221f2146e4e4870bf2ee0bc48f2d5 56cd7859e05c36c06b56d013b55a252d0bb7e158 9ea88f22fc6269854151c571162c5bcf958bee2b
 tree cec002aab630c8bc701cb85bc94e55e751cd2d8f
-
 parent 56cd7859e05c36c06b56d013b55a252d0bb7e158
-parent 9ea88f22fc6269854151c571162c5bcf958bee2b  ###Два Родителя!
-
+parent 9ea88f22fc6269854151c571162c5bcf958bee2b
 
 author Chris Griggs <cgriggs@hashicorp.com> 1579657548 -0800
 committer GitHub <noreply@github.com> 1579657548 -0800
@@ -128,16 +128,12 @@ c0b176109 prevent log output during init
 
 	7. Кто автор функции synchronizedWriters?
 
-Указанной функции не вижу:
-#git grep -p -n "synchronized.*"
-internal/instances/expander.go=3=import (
-internal/instances/expander.go:23:// Expander is a synchronized object whose methods can be safely called
-website/upgrade-guides/0-12.html.markdown=58=Then, perform the following steps:
-website/upgrade-guides/0-12.html.markdown:65:  synchronized.
-website/upgrade-guides/0-12.html.markdown=131=once more before upgrading in order to ensure that the latest state snapshot is
-website/upgrade-guides/0-12.html.markdown:132:synchronized with the latest configuration.
-website/upgrade-guides/0-12.html.markdown=137=any later v0.11 release) to perform one last `terraform init` and
-website/upgrade-guides/0-12.html.markdown:138:`terraform apply` to ensure that everything is initialized and synchronized.
+#git log -p --all -G "func.*synchronizedWriter.*"
 
-Точки разделения для отдельного репозитория истории не вижу.
-Данныя функция сущетсвует ?
+commit 5ac311e2a91e381e2f52234668b49ba670aa0fe5
+Author: Martin Atkins <mart@degeneration.co.uk>
+Date:   Wed May 3 16:25:41 2017 -0700
+
+    main: synchronize writes to VT100-faker on Windows
+
+
