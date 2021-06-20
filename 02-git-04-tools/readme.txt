@@ -3,7 +3,6 @@
 #git log | grep "aefea"  
 commit aefead2207ef7e2aa5dc81a34aedf0cad4c32545
 
-____
 
     2. Какому тегу соответствует коммит 85024d3?
 
@@ -17,14 +16,13 @@ Date:   Thu Mar 5 20:56:10 2020 +0000
 
     v0.12.23
     
-____
 
     3. Сколько родителей у коммита b8d720? Напишите их хеши.
 
-git log | grep "b8d720"
+#git log | grep "b8d720"
 commit b8d720f8340221f2146e4e4870bf2ee0bc48f2d5
 
-git log --pretty=raw --parents -1 b8d720f8340221f2146e4e4870bf2ee0bc48f2d5
+#git log --pretty=raw --parents -1 b8d720f8340221f2146e4e4870bf2ee0bc48f2d5
 commit b8d720f8340221f2146e4e4870bf2ee0bc48f2d5 56cd7859e05c36c06b56d013b55a252d0bb7e158 9ea88f22fc6269854151c571162c5bcf958bee2b
 tree cec002aab630c8bc701cb85bc94e55e751cd2d8f
 parent 56cd7859e05c36c06b56d013b55a252d0bb7e158
@@ -47,8 +45,7 @@ gpgsig -----BEGIN PGP SIGNATURE-----
 
     [Cherrypick] community links
  
- ____
-
+ 
     4. Перечислите хеши и комментарии всех коммитов которые были сделаны между тегами v0.12.23 и v0.12.24.
 
 #git log --oneline v0.12.23..v0.12.24
@@ -63,7 +60,6 @@ d5f9411f5 command: Fix bug when using terraform login on Windows
 dd01a3507 Update CHANGELOG.md
 225466bc3 Cleanup after v0.12.23 release
 
-____
 
     5. Найдите коммит в котором была создана функция func providerSource, ее определение в коде выглядит так func providerSource(...) (вместо троеточего перечислены аргументы).
 
@@ -117,9 +113,8 @@ diff --git a/provider_source.go b/provider_source.go
 +       // locations. That'll come later.
 +       // For now, we have a fixed set of search directories:
 
-____
 
-6. Найдите все коммиты в которых была изменена функция globalPluginDirs.
+	6. Найдите все коммиты в которых была изменена функция globalPluginDirs.
 
 #git log --oneline -G"globalPluginDirs(.*)"
 22a2580e9 main: Use the new cliconfig package credentials source
@@ -127,7 +122,8 @@ ____
 c0b176109 prevent log output during init
 8364383c3 Push plugin discovery down into command package
 
-7. Кто автор функции synchronizedWriters?
+
+	7. Кто автор функции synchronizedWriters?
 
 Указанной функции не вижу:
 #git grep -p -n "synchronized.*"
