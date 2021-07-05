@@ -45,6 +45,33 @@ WantedBy=multi-user.target
              └─534027 /usr/local/bin/node_exporter
 # systemctl enable node_exporter
 ```
+
+#### Доработка - передача доп аргумента.
+add to service:
+```
+[Service]
+EnvironmentFile=/etc/.progconfta
+ExecStart=/usr/local/bin/node_exporter $ARG1
+
+# cat /etc/.progconfta
+ARG1=--version
+
+systemctl status node_exporter $ARG1
+● node_exporter.service - Node Exporter
+     Loaded: loaded (/etc/systemd/system/node_exporter.service; enabled; vendor preset: enabled)
+     Active: inactive (dead) since Mon 2021-07-05 09:03:21 UTC; 53s ago
+    Process: 32048 ExecStart=/usr/local/bin/node_exporter $ARG1 (code=exited, status=0/SUCCESS)
+   Main PID: 32048 (code=exited, status=0/SUCCESS)
+
+Jul 05 09:03:21 vshchepkin systemd[1]: Started Node Exporter.
+Jul 05 09:03:21 vshchepkin node_exporter[32048]: node_exporter, version 1.1.2 (branch: HEAD, revision: b597c1244d7bef49e6f3359c87a56dd7707f6719)
+Jul 05 09:03:21 vshchepkin node_exporter[32048]:   build user:       root@f07de8ca602a
+Jul 05 09:03:21 vshchepkin node_exporter[32048]:   build date:       20210305-09:29:10
+Jul 05 09:03:21 vshchepkin node_exporter[32048]:   go version:       go1.15.8
+Jul 05 09:03:21 vshchepkin node_exporter[32048]:   platform:         linux/amd64
+Jul 05 09:03:21 vshchepkin systemd[1]: node_exporter.service: Succeeded.
+```
+
 ----
 2.	Ознакомьтесь с опциями node_exporter и выводом /metrics по-умолчанию. Приведите несколько опций, которые вы бы выбрали для базового мониторинга хоста по CPU,  
 памяти, диску и сети.
