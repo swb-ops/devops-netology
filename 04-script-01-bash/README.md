@@ -95,4 +95,22 @@ Mon 26 Jul 2021 07:54:35 PM UTC
 ---
 4.	Необходимо дописать скрипт из предыдущего задания так, чтобы он выполнялся до тех пор, пока один из узлов не окажется недоступным. Если любой из узлов недоступен - 
 IP этого узла пишется в файл error, скрипт прерывается
+```
+vshchepkin@vshchepkin:~/scripts$ cat ./check2_hosts.sh
+#!/usr/bin/env bash
 
+h3=192.168.0.1
+h1=173.194.222.113
+h2=87.250.250.242
+
+while true; do
+        for m in $h1 $h2 $h3; do
+                curl --connect-timeout 3 $m:80 > /dev/null
+        done
+                        if (($? != 0)); then
+                                echo $m is fail >> check2.log
+                                date >> check2.log
+                                break
+                        fi
+done
+```
