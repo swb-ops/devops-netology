@@ -88,7 +88,8 @@ systemd-resolved использует 53 udp порт.
 5.	Используя diagrams.net, создайте L3 диаграмму вашей домашней сети или любой другой сети, с которой вы работали.
 Я рисую в Visio, вот схемка моего маленького ЦОДа  
 
-![alt text](pictures/scheme_visio.png "Visio")
+![alt text](/pictures/scheme_visio.png "Visio") 
+
 
 ---
 6*. Установите Nginx, настройте в режиме балансировщика TCP или UDP.
