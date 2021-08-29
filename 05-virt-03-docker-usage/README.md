@@ -6,17 +6,19 @@
 
 Сценарий:
 
-- Высоконагруженное монолитное java веб-приложение;
-- Go-микросервис для генерации отчетов;
-- Nodejs веб-приложение;
-- Мобильное приложение c версиями для Android и iOS;
-- База данных postgresql используемая, как кэш;
-- Шина данных на базе Apache Kafka;
-- Очередь для Logstash на базе Redis;
-- Elastic stack для реализации логирования продуктивного веб-приложения - три ноды elasticsearch, два logstash и две ноды kibana;
-- Мониторинг-стек на базе prometheus и grafana;
-- Mongodb, как основное хранилище данных для java-приложения;
-- Jenkins-сервер.
+- Высоконагруженное монолитное java веб-приложение - физический сервер, необходимости в микросервисах нет;
+- Go-микросервис для генерации отчетов - docker подходит;
+- Nodejs веб-приложение - docker подходит;
+- Мобильное приложение c версиями для Android и iOS - docker ?!;
+- База данных postgresql используемая, как кэш - физическая машина или виртуалка;
+- Шина данных на базе Apache Kafka - kafka мощный брокер сообщений, возможно лучше размещать на виртуалке, хотя в сети пишут, что норм размещают в контейнерах;
+- Очередь для Logstash на базе Redis - сам logstash, думаю можно без проблем размещать в контейнере, redis в виртуалке, ближе в RAM;
+- Elastic stack для реализации логирования продуктивного веб-приложения - три ноды elasticsearch, два logstash и две ноды kibana -
+logstash и kibana, думаю без проблем можно размещать в контейнерах, с нодами elastic не уверен, они используют в большом объеме RAM, возможно лучше в запустить их в виртуалках;
+- Мониторинг-стек на базе prometheus и grafana - docker;
+- Mongodb, как основное хранилище данных для java-приложения - на лекциях говорили, что лучше размещать БД на физических серверах, поэтому может зависеть от нагрузки,
+возможно подойдет виртуалка;
+- Jenkins-сервер - docker.
 
 ---
 ### Задача 2
@@ -38,6 +40,72 @@ Hey, Netology
 </html>
 ```
 Опубликуйте созданный форк в своем репозитории и предоставьте ответ в виде ссылки на докерхаб-репо.
+
+```
+root@vshchepkin:/home/vshchepkin# docker pull httpd
+root@vshchepkin:/home/vshchepkin# docker run --name apache -d httpd
+root@vshchepkin:/home/vshchepkin# docker ps
+CONTAINER ID   IMAGE     COMMAND              CREATED         STATUS         PORTS     NAMES
+1d3ac5e08de0   httpd     "httpd-foreground"   4 seconds ago   Up 2 seconds   80/tcp    apache
+
+root@vshchepkin:/home/vshchepkin/docker# > site.html
+root@vshchepkin:/home/vshchepkin/docker# cat site.html 
+<html>
+<head>
+Hey, Netology
+</head>
+<body>
+<h1>I’m kinda DevOps now</h1>
+</body>
+</html>
+
+root@vshchepkin:/home/vshchepkin/docker# > Dockerfile
+root@vshchepkin:/home/vshchepkin/docker# cat Dockerfile
+FROM httpd
+
+COPY site.html /usr/local/apache2/htdocs
+MAINTAINER swbops <vladimir.shchepkin@ya.ru>
+
+root@vshchepkin:/home/vshchepkin/docker# docker build -t swbops/httpd_fork .
+root@vshchepkin:/home/vshchepkin/docker# docker push swbops/httpd_fork         
+Using default tag: latest
+The push refers to repository [docker.io/swbops/httpd_fork]
+2094028afc46: Pushed 
+c1d6519b2482: Mounted from library/httpd 
+ef38b43e89e8: Mounted from library/httpd 
+7182dd4dd207: Mounted from library/httpd 
+d24d666b2229: Mounted from library/httpd 
+f68ef921efae: Mounted from library/httpd 
+latest: digest: sha256:ec37af06a56bb6fbe82b80766a55d631ab49ddf8df48ad9922e48158a4ad6ea9 size: 1573
+
+root@vshchepkin:/home/vshchepkin/docker# docker image ls 
+REPOSITORY                    TAG       IMAGE ID       CREATED         SIZE
+swbops/httpd_fork             latest    a05964f35e56   7 minutes ago   138MB
+httpd                         latest    c8ca530172a8   12 days ago     138MB
+gcr.io/k8s-minikube/kicbase   v0.0.25   8768eddc4356   8 weeks ago     1.1GB
+
+root@vshchepkin:/home/vshchepkin/docker# docker run --name apache_fork -p 8080:80 -d swbops/httpd_fork
+6f01352c8d7b19f9ed06229569e4b67842e02eb684e3373a8098578adc401d7f
+root@vshchepkin:/home/vshchepkin/docker# docker ps
+CONTAINER ID   IMAGE               COMMAND              CREATED             STATUS             PORTS                                   NAMES
+6f01352c8d7b   swbops/httpd_fork   "httpd-foreground"   9 seconds ago       Up 3 seconds       0.0.0.0:8080->80/tcp, :::8080->80/tcp   apache_fork
+1d3ac5e08de0   httpd               "httpd-foreground"   About an hour ago   Up About an hour   80/tcp                                  apache
+root@vshchepkin:/home/vshchepkin/docker# docker exec -it apache_fork /bin/bash
+root@6f01352c8d7b:/usr/local/apache2# ls /usr/local/apache2/htdocs
+index.html  site.html
+root@6f01352c8d7b:/usr/local/apache2# cat site.html
+<html>
+<head>
+Hey, Netology
+</head>
+<body>
+<h1>I’m kinda DevOps now</h1>
+</body>
+</html>
+
+```
+![alt text](/pictures/site_05_03.png "httpd fork")
+
 
 ---
 ### Задача 3
