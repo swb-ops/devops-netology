@@ -115,3 +115,44 @@ Hey, Netology
 - Подключитесь к первому контейнеру с помощью exec и создайте текстовый файл любого содержания в /share/info ;
 - Добавьте еще один файл в папку info на хостовой машине;
 - Подключитесь во второй контейнер и отобразите листинг и содержание файлов в /info контейнера.
+
+```
+root@vshchepkin:/home/vshchepkin/docker# docker run -t -d --name my_centos -v /home/vshchepkin/docker/info/:/share/info centos
+root@vshchepkin:/home/vshchepkin/docker# docker ps -a
+CONTAINER ID   IMAGE               COMMAND              CREATED          STATUS          PORTS                                   NAMES
+32b1a8ae8a31   centos              "/bin/bash"          2 seconds ago    Up 1 second                                             my_centos
+6f01352c8d7b   swbops/httpd_fork   "httpd-foreground"   35 minutes ago   Up 35 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   apache_fork
+1d3ac5e08de0   httpd               "httpd-foreground"   2 hours ago      Up 2 hours      80/tcp                                  apache
+root@vshchepkin:/home/vshchepkin/docker# docker exec -it my_centos /bin/bash
+[root@32b1a8ae8a31 /]# ls /share/     
+info
+[root@32b1a8ae8a31 /]# echo 'hello guys'>/share/info/file1.txt
+[root@32b1a8ae8a31 /]# cat /share/info/file1.txt
+hello guys
+
+root@vshchepkin:/home/vshchepkin/docker# cat info/file1.txt 
+hello guys
+
+root@vshchepkin:/home/vshchepkin/docker# docker run -t -d --name my_debian -v /home/vshchepkin/docker/info/:/info debian            
+Unable to find image 'debian:latest' locally
+latest: Pulling from library/debian
+4c25b3090c26: Pull complete 
+Digest: sha256:38988bd08d1a5534ae90bea146e199e2b7a8fca334e9a7afe5297a7c919e96ea
+Status: Downloaded newer image for debian:latest
+9465220b604fd19b9b3e530d45c1cbee7a581036313c90c55c75d557a1513175
+root@vshchepkin:/home/vshchepkin/docker# docker ps -a
+CONTAINER ID   IMAGE               COMMAND              CREATED          STATUS          PORTS                                   NAMES
+9465220b604f   debian              "bash"               32 seconds ago   Up 13 seconds                                           my_debian
+32b1a8ae8a31   centos              "/bin/bash"          7 minutes ago    Up 7 minutes                                            my_centos
+6f01352c8d7b   swbops/httpd_fork   "httpd-foreground"   42 minutes ago   Up 42 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   apache_fork
+1d3ac5e08de0   httpd               "httpd-foreground"   2 hours ago      Up 2 hours      80/tcp                                  apache
+
+root@vshchepkin:/home/vshchepkin/docker/info# echo 'by guys'>file2.txt
+root@vshchepkin:/home/vshchepkin/docker/info# ls
+file1.txt  file2.txt
+
+root@9465220b604f:/# cat /info/file1.txt /info/file2.txt
+hello guys
+by guys
+
+```
